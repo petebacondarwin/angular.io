@@ -1,19 +1,201 @@
 include ../../../../_includes/_util-fns
 
 
-:markdown
-   Let's talk Dependency Injection in TypeScript.
-
 .l-main-section
 
   :markdown
-    ## In the beginning
+    Dependency injection has always been one of Angular's biggest features. It allows us to inject dependencies in different components across our applications, without needing to know, how those dependencies are created, or what dependencies they need themselves. In this chapter we're going to explore the dependency injection system that comes with the Angular framework.
 
-    The Angular team added dependency injection to the framework ... and it was good.
+    ## Why Dependency Injection?
 
-    How good? Check out this example!
+    Before we take a look at what Angular's implementation of dependency injection looks like, we first need to understand what it is and why we want this feature at all. Dependency Injection can be interpreted in two different ways. One way is to treat it as a **design pattern**, the other one is to treat it as a framework. Whereas the former explains the pattern that DI is all about, the latter can be a system that helps us out maintaining and assembling dependencies.
 
-  +makeExample('dependency-injection', 'ts/app-class-w-annotations.ts', 'app.ts')
+    Let's start by taking a look at the following code and analysing the problems it introduces.
+
+  +makeExample('dependency-injection', 'ts/app-tightly-coupled-car.ts')
 
   :markdown
-    That is just ***killing it!***
+    Nothing special here. We have a class `Car` that has a constructor in which we set up everything we need in order to construct a car object once needed. What's the problem with this code? Well, as you can see, the constructor not only assigns needed dependencies to internal properties, it also knows how those object are created. For example the engine object is created using the `Engine` constructor, `Tires` seems to be a singleton interface and the doors are requested via a global object.
+
+    This leads to code that is hard to maintain and even harder to test. Just imagine we'd like to test this class. How would we replace `Engine` with a `MockEngine` dependency in that code? When writing tests, we want to test different scenarios that our code is used in, hence each scenario needs it's own configuration. If we want to write testable code, we need to write reusable code that works in any environment as long as all dependencies are satisfied. Which brings us to the conclusion that **testable code is reusable code** and vise versa.
+
+    How can we write this code better and make it more testable? Turns out this is super easy and you probably already know what to do. We change our code to this:
+
+  +makeExample('dependency-injection', 'ts/app-loosely-coupled-car.ts')
+
+  :markdown
+    All we did is we moved the dependency creation out of the constructor and extended the constructor function to expect all needed dependencies. There are no concrete implementations anymore in this code, we literally moved the responsibility of creating those dependencies to a higher level. If we now want to create a car object, all we have to do is to pass all needed dependencies to the constructor:
+
+  +makeExample('dependency-injection', 'ts/app-instantiate-loosely-coupled-car.ts')
+
+  :markdown
+    How cool is that? The dependencies are now decoupled from our class, which allows us to pass in mocked dependencies in case we're writing tests:
+
+    **[INSERT CODE HERE]**
+
+    Believe or not, but **we just learned what Dependency Injection is**. It's really just a pattern that describes that needed dependencies of an entity should either be passed to it's constructor, or to dedicated setter methods of that entity.
+
+    Okay cool, now we know what DI is and how to use it, but when comes a "DI as a framework" into play? As mentioned before, we literally moved the responsibility of dependency creation to a higher level. This is exactly what our new problem is. Who takes care of assembling all those dependencies for us? Well... It's us.
+
+    **[INSERT CODE HERE]**
+
+    We now need to maintain a `main` function. Doing that manually can be quite hairy, especially when the application gets bigger and bigger. Wouldn't it be nice if we could do something like this?
+
+    **[INSERT CODE HERE]**
+
+    In this code, we don't have to know what dependencies are needed to create an object of type `Car`. We just create an injector that figures out how to do that. This is what **Dependency Injection as a framework** is all about. No `main` method required where we have to assemble all of our dependencies ourselves. We have an injector that takes care of that.
+
+    Now that we have a proper understanding of what Dependency Injection is, let's take a look at how that's implemented in Angular.
+
+    ## Dependency Injection in Angular 2
+
+    Angular 2 introduces a new Dependency Injection system that is much more flexible than the one implemented in AngularJS. In order to understand how DI in Angular works, we first need to take a look at the basic concepts behind that new system. The following figure illustrates it's components and their relation.
+
+    **[INSERT FIGURE HERE]**
+
+    DI in Angular basically consists of three things:
+
+    - **Injector** - The injector object that exposes APIs to us to create instances of dependencies.
+    - **Binding** - A binding is like a recipe that tells the injector **how** to create an instance of a depedency. A binding needs a token that maps to a factory function that creates an object.
+    - **Dependency** - A binding might need it's own dependencies in order to work.
+
+    Let's take these concepts and see how they work in code. Before we use DI in an Angular 2 component, we first take a look at how the system works as a standalone module. For simplicity-sake, we stick with our `Car` class and it's dependencies.
+
+    **[INSERT CODE HERE]**
+
+    We import `Injector` from Angular 2 which exposes some static APIs to create injectors. `resolveAndCreate()` is basically a factory function that creates an injector and takes a list of bindings. Wait! How's that list of classes suppose to be a list of bindings? We'll explore that in a second, but for now we focus on `injector.get()`. See how we ask for an instance of `Car` in the last line? How does our injector know, which dependencies need to be created in order to instantiate a car? A look at our `Car` class will explain...
+
+    **[INSERT CODE HERE]**
+
+    We import the `Inject` decorator from the framework and apply it to our constructor parameters. Decorators have been covered in **[INSER CHAPTER LINK HERE]**.
+
+    The `Inject` decorator attaches meta data to our `Car` class, which is then consumed by the DI system afterwards. Basically what we're doing here, is that we tell the DI that the first constructor parameter should be an instance of type `Engine`, the second of type `Tires` and the third of type `Doors`. We can rewrite this code to TypeScript, which feels a bit more natural:
+
+    **[INSERT CODE HERE]**
+
+    Nice, our class declares it's own dependencies and the DI can read that information to instantiate whatever is needed to create an object of type `Car`. But how does the injector know **how** to create such an object? This is where the bindings come into play. Remember the `resolveAndCreate()` method in which we passed a list of classes?
+
+    **[INSERT CODE HERE]**
+
+    ### Injector Bindings
+
+    Again, you might wonder how this list of classes is supposed to be a list of bindings. Well, it turns out that this is actually a shorthand syntax. If we translate this to the longer, more verbose, syntax, things might become a bit more clear.
+
+    **[INSERT CODE HERE]**
+
+    We have a function `bind()` that binds a **token** to a factory function. The token can either be a type or a string. If we read those bindings now, it's much easier to understand what's happening. We bind the type `Car` to the class `Car`,  type `Engine` to the class `Engine` and so on and so forth. This is the recipe mechanism we were talking about earlier. In other words, when we ask for a dependency of type `Car` we would get an instance of class `Car` because of that binding. Bindings tell the injector which dependencies are used across the application and configure how objects of these dependencies are created.
+
+    Now the next question comes up: When do we want to use the longer instead of the shorthand syntax? There's no reason to write `bind(Foo).toClass(Foo)` if we could just stick with `Foo`, right? Yes, that's correct. That's why we started with the shorthand syntax in the first place. However, the longer syntax enables us to do something very very powerful. Let's take a look at the next code snippet.
+
+    **[INSERT CODE HERE]**
+
+    Oh! What's that? We can bind our `Engine` to another class? Yes we can. In fact, we can bind a token to pretty much whatever class we want, as long as it's a type. Here we're binding the token `Engine` to the class `OtherEngine`. Which means, when we now ask for an object of type `Engine`, we get an instance of class `OtherEngine`.
+
+    **[INSERT CODE HERE // injector.get(Engine)]**
+
+    Binding to different classes is a very powerful feature. It allows to use an "abstract" type across our application when asking for dependencies, whereas the actual type of that dependency is defined in the binding. It also solves the problem of name collisions that we have in AngularJS' DI system. In addition to that, we can swap out the actual dependency for a token in a single place without touching any other code, in case we need to refactor something.
+
+    Angular 2's DI introduces a couple of other binding recipes. Sometimes, we don't want to get an instance of a class, but rather just a single value of something or a factory function where more configuration is needed. That's why the binding mechanism of Angular 2's DI comes with more than just one recipe.
+
+    We can bind to a simple value using `.toValue()`, whis comes in handy when we want to bind to simple configuration values.
+
+    **[INSERT CODE HERE]**
+
+    We can bind an alias token to another token like this:
+
+    **[INSERT CODE HERE]**
+
+    Sometimes we need to configure how a dependency is created at runtime depending on a configuration value. This is where binding to factories comes in.
+
+    **[INSERT CODE HERE]**
+
+    Of course, a factory might have it's own dependencies. Passing dependencies to factories is as easy as adding a list of tokens to the factory:
+
+    **[INSERT CODE HERE]**
+
+    ### Optional Dependencies
+
+    The `@Optional` decorator lets us declare dependencies as optional. This comes in handy if, for example, our application expects a third-party library, and in case it's not available, it can fallback.
+
+    **[INSERT CODE HERE]**
+
+    In the code above we're asking for a dependency of type `jQuery`. This dependency is marked as optional. In case it's not available, `$` will be `null`.
+
+    ### Transient Dependencies and Child Injectors
+
+    If we need a transient dependency, something that we want a new instance every time we ask for a dependency, we have two options:
+
+    **Factories** can return instances of classes. Those won't be singletons.
+
+    **[INSERT CODE HERE]**
+
+    We can create a **child injector** using `Injector.resolveAndCreateChild()`. A child injector introduces it's own bindings and an instance of an object will be different from the parent injector's instance.
+
+    **[INSERT CODE HERE]**
+
+    Child injectors are even more interesting. It turns out that a child injector will look up a token binding on it's parent injector if no binding for the given token is registered on the child injector. The following graphic visualises what happens:
+
+    **[INSERT FIGURE HERE]**
+
+    The graphic shows three injectors where two of them are child injectors. Each injector gets it's own configuration of bindings. Now, if we ask the second child injector for an instance of type `Car`, the car object will be created by that child injector. However, the engine will be created by the first child injector and the tires and doors will be created by the outer most parent injector. It kind of works like a prototype chain.
+
+    ### DI in Angular Components
+
+    Now that we've learned how the DI in Angular 2 works, you might wonder how it is used in the framework itself. Do we have to create injectors manually when we build Angular 2 components? Luckily not. Angular components have a nice API that hides all the injector machinery for us.
+
+    Lets take a look at the following simple Angular 2 component.
+
+    **[INSERT CODE HERE]**
+
+    Nothing special here. Lets say we want to extend this component by using a `NameService` that is used in the component's constructor. Such a service could look something like this:
+
+    **[INSERT CODE HERE]**
+
+    Again, nothing special here. We just create a class. How do we get this service into our component? It turns out that every component in Angular creates it's own injector. If you think of your application as a component tree, we basically also have an injector tree. What we need to do now, is to pass bindings to our component's injector, so it knows about the `NameService` type. The `@Component` annotation comes with configuration that has a `binding` property. Here's how we can use it:
+
+    **[INSERT CODE HERE]**
+
+    This looks familiar, right? `bindings` is really just a collection of bindings that is used to configure our component's injector. Now, to actually inject a dependency of type `NameService`, we just use the tools we've already learned - `@Inject` decorators.
+
+    **[INSERT CODE HERE]**
+
+    In fact, in TypeScript we can just add type annotations to our constructor:
+
+    **[INSERT CODE HERE]**
+
+    TypeScript will then create the meta data, that is needed for DI, for us.
+
+    Cool, **we learned how to use DI in Angular 2**!
+
+    ## Advanced Dependency Injection
+
+    Even though we learned that Angular 2's new dependency injection is very flexible, there are still a couple of topics that we haven't discussed yet. One of them is how Angular treats the relationship between **host** and child injectors, and the other one is how the **visibility of dependencies** are handled.
+
+    ### Understanding host relationships
+
+    Host and visibility are both features in Angular 2's dependency injection system, that are very specific to Angular. For now just keep in mind that we probably don't need any of these features when using Angular 2's DI not in the context of Angular itself. However, once we understood the context and why this feature exist, we'll also take a look at how this is implemented under the hood, so we all know what's going on.
+
+    Let's start off by imagining the following scenario. We have three nested components that all do their own thing (because that's what components do in Angular 2):
+
+    **[INSERT CODE HERE]**
+
+    As we learned earlier, each component in Angular creates it's own injector. Which means the code above can be translated to something like this:
+    **[INSERT CODE HERE]**
+
+    To come back to our nice and cozy JavaScript world, we could also translate it to this:
+
+    **[INSERT CODE HERE]**
+
+    Of course, this code is very simplified and as we can see, there are also no bindings passed to any of the injectors, which is usually the case. Let's add some actual bindings, to see how the relationships between the injectors affect dependency instantiation.
+
+    **[INSERT CODE HERE]**
+
+    The injector tree allows us to define injector bindings for a specific component and it's children. With the code above, if we ask `grandChild` for a dependency of type `Car` we'll get back an instance of type `Convertible`, because it defines it's own binding for that type. However, if we ask for a dependency of type `Engine`, we simply get an instance of the class `Engine`, because `grandChild` will ask it's parent injector (recursively) until an injector has bindings defined for that type.
+
+    Okay, this sounds all very powerful but where does this host thing come into play? Let's get back to the original code with our three nested components. `<component-two>` and `<component-three>` are both children of `<component-one>`. However, we don't know yet what's inside of our components themselves. In Angular 2, a component always has a view.
+
+    **Okay, but how is that related to DI?**
+
+    That's a good question! We've now seen a couple of times that an injector is always looking up a dependency on it's parent injector in case it doesn't have bindings for the requested type. That parent injector does pretty much the same until we finally get our dependency. When we think in components, that means that a component's injector will lookup up a dependency even across boundaries.
+
+    [TODO]
