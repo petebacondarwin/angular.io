@@ -5,7 +5,7 @@
   margin-bottom: $unit * 2;
 
   header {
-    background: #1976D2;
+    background: $fog;
     color: $snow;
     padding: $unit $unit 0px $unit;
     border-radius: 4px 4px 0px 0px;
@@ -18,7 +18,7 @@
       padding: 0px ($unit * 3);
       margin-right: $unit;
       font-size: 13px;
-      background: #3F94E9;
+      background: $grey;
       color: $snow;
       border-radius: 4px 4px 0px 0px;
       // font-weight: 500;
