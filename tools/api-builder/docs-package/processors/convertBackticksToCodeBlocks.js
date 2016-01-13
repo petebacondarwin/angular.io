@@ -19,7 +19,8 @@ function escapeHtml(unsafe) {
 //   6th is the first char on the next line.
 var BACKTICK_CAPTURE = /(( *)```(.*$)([^]*?)```\s*)^(\s*)(\S)/m;
 
-var CODE_EXAMPLE = 'code-example(format="linenums" language="js").';
+var CODE_EXAMPLE_START = '<code-example format="linenums" language="js">';
+var CODE_EXAMPLE_END = '</code-example>';
 
 module.exports = function convertBackticksToCodeBlocks() {
   return {
@@ -38,19 +39,9 @@ module.exports = function convertBackticksToCodeBlocks() {
             var blockContents = captures[4];
             var postPad = captures[5];
             var nextBlockStartChar = captures[6];
-            var codeExamplePrefix = language.length ? CODE_EXAMPLE.replace('js', language) : CODE_EXAMPLE;
-            // modulo op in next line insures that pad is always a multiple of 2 ( jade whitespace).
-            var newPrePad = prePad.substr(2 + (prePad.length % 2)); // exdent
-            var replaceVal = '\n' + newPrePad + codeExamplePrefix + escapeHtml(blockContents) + '\n';
-            // if nextBlock does NOT start with a '.' then we want to restart a markdown block.
-            // and that block needs to be exdented from the preceding code-example content.
-            if (nextBlockStartChar != '.') {
-              if (postPad.length >= 2) {
-                // modulo op in next line insures that pad is always a multiple of 2 ( jade whitespace).
-                postPad = postPad.substr(2 + (postPad.length % 2)); // exdent
-              }
-              replaceVal = replaceVal + postPad + ':marked\n';
-            }
+
+            var codeExamplePrefix = language.length ? CODE_EXAMPLE_START.replace('js', language) : CODE_EXAMPLE_START;
+            var replaceVal = '\n' + prePad + codeExamplePrefix + escapeHtml(blockContents) + CODE_EXAMPLE_END + '\n';
             doc.renderedContent = doc.renderedContent.replace(entireBlock, replaceVal);
             captures = BACKTICK_CAPTURE.exec(doc.renderedContent);
           }

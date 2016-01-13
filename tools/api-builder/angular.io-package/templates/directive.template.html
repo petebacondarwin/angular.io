@@ -6,43 +6,45 @@
 {% endblock %}
 
 
-{% block additional -%}
-.l-main-section
-  h2 Selectors
-  .l-sub-section{% for selector in doc.directiveOptions.selector.split(',') %}
-    h3.selector
+{% block additional %}
+  .c2
+    h2 Selectors <i class="material-icons md-14">help</i>
+  .c10
+    p
+      {% for selector in doc.directiveOptions.selector.split(',') %}
       code {$ selector $}{% endfor %}
 
-{% if doc.inputs %}
-.l-main-section
-  h2 Inputs
-  .l-sub-section{% for binding, property in doc.inputs %}
-    h3.input
-      code {$ property.bindingName | dashCase $}
+{% if doc.outputs %}
+  .c2
+    h2 Outputs <i class="material-icons md-14">help</i>
+  .c10
+    {% for binding, property in doc.outputs %}p
+      a(href="#")
+        code {$ property.bindingName $}
       | &nbsp;bound to&nbsp;
-      code {$ property.memberDoc.classDoc.name $}.{$ property.propertyName $}
-    :marked
-{$ property.memberDoc.description | indentForMarkdown(2) | trimBlankLines $}{% endfor %}
+      a(href="#")
+        code {$ property.memberDoc.classDoc.name $}.{$ property.propertyName $}
+{% endfor %}
 {% endif %}
 
-{% if doc.outputs %}
-.l-main-section
-  h2 Outputs
-  .l-sub-section{% for binding, property in doc.outputs %}
-    h3.output
-      code {$ property.bindingName | dashCase $}
+{% if doc.inputs %}
+  .c2
+    h2 Inputs <i class="material-icons md-14">help</i>
+  .c10
+    {% for binding, property in doc.inputs %}p
+      a(href="#")
+        code {$ property.bindingName $}
       | &nbsp;bound to&nbsp;
-      code {$ property.memberDoc.classDoc.name $}.{$ property.propertyName $}
-    :marked
-{$ event.memberDoc.description | indentForMarkdown(2) | trimBlankLines $}
+      a(href="#")
+        code {$ property.memberDoc.classDoc.name $}.{$ property.propertyName $}
 {% endfor %}
 {% endif %}
 
 {% if doc.directiveOptions.exportAs %}
-.l-main-section
-  h2 Exported As
-  .l-sub-section
-    h3.export-as
+  .c2
+    h2 Exported As <i class="material-icons md-14">help</i>
+  .c10
+    p
       code {$ doc.directiveOptions.exportAs $}
 {% endif %}
 {% endblock %}

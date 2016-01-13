@@ -5,71 +5,90 @@
 {% block body %}
 include {$ relativePath(doc.path, '_util-fns') $}
 
-h2(class="{$ doc.docType $} export")
-  pre.prettyprint
-    code.
-      export {$ doc.docType $} {$ doc.name $}
+.grid-fluid.api-content
+  .c2
+    h2 What It Does
+  .c10
+    :marked
+    {%- if doc.notYetDocumented %}
+      *Not Yet Documented*
+    {% else %}
+      Short Description
+    {% endif %}
 
-p.location-badge.
-  exported from {@link {$ doc.moduleDoc.id $} {$doc.moduleDoc.id $} }
-  defined in {$ githubViewLink(doc) $}
-
-:marked
-{%- if doc.notYetDocumented %}
-  *Not Yet Documented*
-{% else %}
-{$ doc.description | indentForMarkdown(2) | trimBlankLines $}
-{% endif %}
+  .c2
+    h2 How To Use
+  .c10
+    p
+      Some info on how to use this
 
 {% block additional %}
 {% endblock %}
 
-{% block annotations %}
-{%- if doc.decorators.length %}
-.l-main-section
-  h2 Annotations
-{%- for decorator in doc.decorators %}
-  .l-sub-section
-    h3.annotation
-      pre.prettyprint
-        code.
-          @{$ decorator.name $}{$ paramList(decorator.arguments) | indent(10, false) $}{% endfor %}{% endif %}
-{% endblock %}
-
-
-{%- if doc.constructorDoc and not doc.constructorDoc.internal %}
-.l-main-section
-  h2 Constructor
-  .l-sub-section
-    h3#{$ doc.constructorDoc.name | toId $}
-      pre.prettyprint
-        code.
-          {$ doc.constructorDoc.name $}{$ paramList(doc.constructorDoc.parameters) | indent(8, false) | trim $}
+  .c2
+    h2 Class Overview
+  .c10
+    pre.prettify
+      code.
+        class {$ doc.name $} {
+          ...
+        }
+  .c2
+    h2 Class Description
+  .c10
     :marked
-      {%- if doc.constructorDoc.notYetDocumented %}
+      {%- if (doc.description|trimBlankLines) == '' %}
       *Not Yet Documented*
       {% else %}
-{$ doc.constructorDoc.description | indentForMarkdown(6) | replace('## Example', '') | replace('# Example', '') | trimBlankLines $}
-      {% endif -%}
+{$ doc.description | indentForMarkdown(6) | trimBlankLines $}
+      {% endif %}
+  .c2
+    h2 Class Details
+  .c10
+    h3 {$ doc.name $}
+{%- if doc.constructorDoc and not doc.constructorDoc.internal %}
+    hr
+    h3#{$ doc.constructorDoc.name | toId $}
+      code.
+        {$ doc.constructorDoc.name $}{$ paramList(doc.constructorDoc.parameters) | indent(8, false) | trim $}
+      :marked
+        {%- if doc.constructorDoc.notYetDocumented %}
+        *Not Yet Documented*
+        {% else %}
+{$ doc.constructorDoc.description | indentForMarkdown(8) | replace('## Example', '') | replace('# Example', '') | trimBlankLines $}
+
+        {% endif -%}
 {% endif %}
 
 {% if doc.members.length -%}
-.l-main-section
-  h2 Members
 {%- for member in doc.members %}{% if not member.internal %}
-  .l-sub-section
-    h3#{$ member.name | toId $}
-      pre.prettyprint
-        code.
-          {$ member.name $}{$ paramList(member.parameters) | indent(8, false) | trim $}{$ returnType(member.returnType) $}
 
+    hr
+    h3#{$ member.name | toId $}
+      code.
+        {$ member.name $}{$ paramList(member.parameters) | indent(8, false) | trim $}{$ returnType(member.returnType) $}
     :marked
       {%- if member.notYetDocumented %}
         *Not Yet Documented*
       {% else %}
 {$ member.description | indentForMarkdown(6) | replace('## Example', '') | replace('# Example', '') | trimBlankLines $}
       {% endif %}
-{% endif %}{% endfor %}
+
+
+{% endif %}
+
+{% endfor %}
 {%- endif -%}
 
 {% endblock %}
+
+
+{% block annotations %}
+{%- if doc.decorators.length %}
+  .c2
+    h2 Annotations
+  .c10
+{%- for decorator in doc.decorators %}
+    code @{$ decorator.name $}{$ paramList(decorator.arguments) | indent(4, false) $}{% endfor %}{% endif %}
+{% endblock %}
+
