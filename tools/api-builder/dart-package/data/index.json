@@ -1,0 +1,297 @@
+[
+    {
+        "name": "angular2.animate",
+        "qualifiedName": "angular2.animate",
+        "href": "angular2.animate/angular2.animate-library.html",
+        "type": "library"
+    },
+    {
+        "name": "Animation",
+        "qualifiedName": "angular2.animate.Animation",
+        "href": "angular2.animate/Animation-class.html",
+        "type": "class",
+        "enclosedBy": {
+            "name": "angular2.animate",
+            "type": "library"
+        }
+    },
+    {
+        "name": "Animation",
+        "qualifiedName": "angular2.animate.Animation",
+        "href": "angular2.animate/Animation/Animation.html",
+        "type": "constructor",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "browserDetails",
+        "qualifiedName": "angular2.animate.Animation.browserDetails",
+        "href": "angular2.animate/Animation/browserDetails.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "callbacks",
+        "qualifiedName": "angular2.animate.Animation.callbacks",
+        "href": "angular2.animate/Animation/callbacks.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "completed",
+        "qualifiedName": "angular2.animate.Animation.completed",
+        "href": "angular2.animate/Animation/completed.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "computedDelay",
+        "qualifiedName": "angular2.animate.Animation.computedDelay",
+        "href": "angular2.animate/Animation/computedDelay.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "computedDuration",
+        "qualifiedName": "angular2.animate.Animation.computedDuration",
+        "href": "angular2.animate/Animation/computedDuration.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "data",
+        "qualifiedName": "angular2.animate.Animation.data",
+        "href": "angular2.animate/Animation/data.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "element",
+        "qualifiedName": "angular2.animate.Animation.element",
+        "href": "angular2.animate/Animation/element.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "eventClearFunctions",
+        "qualifiedName": "angular2.animate.Animation.eventClearFunctions",
+        "href": "angular2.animate/Animation/eventClearFunctions.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "startTime",
+        "qualifiedName": "angular2.animate.Animation.startTime",
+        "href": "angular2.animate/Animation/startTime.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "totalTime",
+        "qualifiedName": "angular2.animate.Animation.totalTime",
+        "href": "angular2.animate/Animation/totalTime.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "hashCode",
+        "qualifiedName": "angular2.animate.Animation.hashCode",
+        "href": "angular2.animate/Animation/hashCode.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "runtimeType",
+        "qualifiedName": "angular2.animate.Animation.runtimeType",
+        "href": "angular2.animate/Animation/runtimeType.html",
+        "type": "property",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "addClasses",
+        "qualifiedName": "angular2.animate.Animation.addClasses",
+        "href": "angular2.animate/Animation/addClasses.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "addEvents",
+        "qualifiedName": "angular2.animate.Animation.addEvents",
+        "href": "angular2.animate/Animation/addEvents.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "applyStyles",
+        "qualifiedName": "angular2.animate.Animation.applyStyles",
+        "href": "angular2.animate/Animation/applyStyles.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "handleAnimationCompleted",
+        "qualifiedName": "angular2.animate.Animation.handleAnimationCompleted",
+        "href": "angular2.animate/Animation/handleAnimationCompleted.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "handleAnimationEvent",
+        "qualifiedName": "angular2.animate.Animation.handleAnimationEvent",
+        "href": "angular2.animate/Animation/handleAnimationEvent.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "onComplete",
+        "qualifiedName": "angular2.animate.Animation.onComplete",
+        "href": "angular2.animate/Animation/onComplete.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "parseDurationString",
+        "qualifiedName": "angular2.animate.Animation.parseDurationString",
+        "href": "angular2.animate/Animation/parseDurationString.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "removeClasses",
+        "qualifiedName": "angular2.animate.Animation.removeClasses",
+        "href": "angular2.animate/Animation/removeClasses.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "setup",
+        "qualifiedName": "angular2.animate.Animation.setup",
+        "href": "angular2.animate/Animation/setup.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "start",
+        "qualifiedName": "angular2.animate.Animation.start",
+        "href": "angular2.animate/Animation/start.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "stripLetters",
+        "qualifiedName": "angular2.animate.Animation.stripLetters",
+        "href": "angular2.animate/Animation/stripLetters.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "wait",
+        "qualifiedName": "angular2.animate.Animation.wait",
+        "href": "angular2.animate/Animation/wait.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "toString",
+        "qualifiedName": "angular2.animate.Animation.toString",
+        "href": "angular2.animate/Animation/toString.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "noSuchMethod",
+        "qualifiedName": "angular2.animate.Animation.noSuchMethod",
+        "href": "angular2.animate/Animation/noSuchMethod.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    },
+    {
+        "name": "operator ==",
+        "qualifiedName": "angular2.animate.Animation.==",
+        "href": "angular2.animate/Animation/operator_equals.html",
+        "type": "method",
+        "enclosedBy": {
+            "name": "Animation",
+            "type": "class"
+        }
+    }]
