@@ -1,0 +1,8 @@
+# Comments and blank lines are ignored. Entry format:
+# <grep-pattern-to-match-file-path> # reason / issue number
+
+/[jt]s/.*/api/router-deprecated/    # Obsolete API entries. No issue open yet.
+/ts/latest/guide/style-guide.html   # https://github.com/angular/angular.io/issues/2123
+/ts/latest/guide/upgrade.html       # In transient state until RC6 - @filipe.silva
+/docs/(dart|ts/.*/quick)            # All have pending fixes (submitted PRs) - @chalin
+/ts/latest/tutorial/toh-pt3.html    # https://github.com/angular/angular.io/issues/2119
