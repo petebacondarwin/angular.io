@@ -5,6 +5,9 @@ var Dgeni = require('dgeni');
 var _ = require('lodash');
 var globby = require('globby');
 var ignoreDirs = ['**/node_modules/**', '**/dist/**', '**/typings/**'];
+// chalin extra
+var fsExtra = require('fs-extra');
+var fs = fsExtra;
 
 var _getLogLevel = function (options) { return options.logLevel || 'info'; }
 
@@ -39,7 +42,15 @@ var shredSingleExampleDir = function(shredOptions, fileDir) {
   var cleanPath = path.join(fragmentsDir, '*.*')
   return del([ cleanPath, '!**/*.ovr.*']).then(function(paths) {
     // console.log('Deleted files/folders:\n', paths.join('\n'));
-    return shred(options);
+    return shred(options).then(() => {
+      console.warn(`chalin: shredSingleExampleDir ended: used options ${JSON.stringify(options,null,2)}`);
+      var d = options.fragmentsDir;
+      var files = fs.readdirSync(d);
+      console.log('chalin: dir ' + d);
+      files.forEach((f) => console.log('  ' + f));
+    }).catch((e) => {
+      console.error(`shredSingleExampleDir: ${e}`);
+    });
   });
 }
 
@@ -144,7 +155,8 @@ function createShredExamplePackage(shredOptions) {
         basePath: options.examplesDir
       } ];
     })
-    .config(function(writeFilesProcessor) {
+    .config(function(log, writeFilesProcessor) {
+      log.level = _getLogLevel(shredOptions);
       // Specify where the writeFilesProcessor will write our generated doc files
       writeFilesProcessor.outputFolder  = path.resolve(options.fragmentsDir);
     });

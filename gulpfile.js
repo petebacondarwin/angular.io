@@ -775,7 +775,24 @@ gulp.task('_shred-devguide-examples', ['_shred-clean-devguide', '_copy-example-b
   examplePaths.forEach(function (examplePath) {
     promise = promise.then(() => docShredder.shredSingleExampleDir(_devguideShredOptions, examplePath));
   });
-  return promise;
+  return promise.then(() => {
+    // .then is chalin tmp
+    gutil.log('chalin: shredding is complete');
+    var p = DOCS_PATH;
+    var files = fs.readdirSync(p);
+    gutil.log('chalin: dir ' + p);
+    files.forEach((f) => gutil.log('  ' + f));
+
+    p = path.resolve(p, '_examples',  'animations');
+    files = fs.readdirSync(p);
+    gutil.log('chalin: dir ' + p);
+    files.forEach((f) => gutil.log('  ' + f));
+
+    p = path.resolve(p, 'ts');
+    files = fs.readdirSync(p);
+    gutil.log('chalin: dir ' + p);
+    files.forEach((f) => gutil.log('  ' + f));
+  });
 });
 
 gulp.task('_shred-devguide-shared-jade', ['_shred-clean-devguide-shared-jade', '_copy-example-boilerplate'],  function() {
@@ -849,6 +866,22 @@ gulp.task('lint', function() {
 // Helper functions
 
 function harpCompile() {
+  //[chalin tmp
+  gutil.log('chalin: harpCompile: start');
+  var p = DOCS_PATH;
+  var files = fs.readdirSync(p);
+  gutil.log('chalin: dir ' + p);
+  files.forEach(function(f) {
+    gutil.log('  ' + f);
+  }, this);
+
+  var p = path.join(DOCS_PATH, '_fragments/dependency-injection/dart/lib');
+  var files = fs.readdirSync(p);
+  gutil.log('chalin: dir ' + p);
+  files.forEach(function(f) {
+    gutil.log('  ' + f);
+  }, this);
+  //chalin]
   // Supposedly running in production makes harp faster
   // and less likely to drown in node_modules.
   env({
