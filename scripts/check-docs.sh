@@ -3,6 +3,7 @@
 set -e -o pipefail
 
 [[ -z "$NGIO_ENV_DEFS" ]] && . ./scripts/env-set.sh > /dev/null
+if [[ "x$1" == "x-v" ]]; then VERBOSE=1; shift; fi
 
 SITE=./www
 
@@ -24,9 +25,17 @@ fi
 travis_fold start $CHECK_FOR
 echo "Searching site for HTML files containing bad code excerpts (BAD FILENAME)."
 echo
-echo "Full file list:"
 
-find $SITE -type f -name "*.html" -exec grep -le "BAD FILENAME" {} \; | tee $LOGFILE_FULL
+if [[ -n "$VERBOSE" ]]; then
+    travis_fold start $CHECK_FOR-details
+    echo "Full file list with grep details:"
+    find $SITE -type f -name "*.html" -exec grep -Hne "BAD FILENAME" {} \; | tee $LOGFILE_FULL
+    travis_fold end $CHECK_FOR-details
+    echo
+else
+    echo "Full file list:"
+    find $SITE -type f -name "*.html" -exec grep -le "BAD FILENAME" {} \; | tee $LOGFILE_FULL
+fi
 
 echo
 echo "Skip patterns for paths of files known to have issues ($SKIPFILE_SRC):"

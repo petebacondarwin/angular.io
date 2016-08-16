@@ -1,4 +1,4 @@
-# Comments and blank lines are ignored. Entry format:
+# Comments & blank lines are ignored. Entry format (make pattern as specific as possible):
 # <grep-pattern-to-match-file-path> # reason / issue number
 
 /[jt]s/.*/api/router-deprecated/    # Obsolete API entries. No issue open yet.
