@@ -772,6 +772,7 @@ gulp.task('_shred-devguide-examples', ['_shred-clean-devguide', '_copy-example-b
   // Split big shredding task into partials 2016-06-14
   var examplePaths = globby.sync(EXAMPLES_PATH+'/*/', {ignore: ['/node_modules', 'typings/', '_protractor/']});
   var promise = Promise.resolve(true);
+  console.log('_shred_devguide-examples', examplePaths);
   examplePaths.forEach(function (examplePath) {
     promise = promise.then(() => docShredder.shredSingleExampleDir(_devguideShredOptions, examplePath));
   });

@@ -140,9 +140,13 @@ function createShredExamplePackage(shredOptions) {
         }
       });
 
+      console.log('createShredExamplePackage - before', includeFiles);
+
       // HACK ( next two lines) because the glob function that dgeni uses internally isn't good at removing 'node_modules' early
       // this just uses globby to 'preglob' the include files ( and  exclude the node_modules).
       var includeFiles = globby.sync( includeFiles, { ignore: ignoreDirs } );
+
+      console.log('createShredExamplePackage - after', includeFiles);
 
       log.info(`Shredding ${includeFiles.length} files inside ${shredOptions.examplesDir}`);
 
