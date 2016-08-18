@@ -11,7 +11,7 @@ env:
     - DISPLAY=:99.0
     - CHROME_BIN=chromium-browser
     - LATEST_RELEASE=2.0.0-rc.4
-    - TASK_FLAGS="--dgeni-log=silly"
+    - TASK_FLAGS="--dgeni-log=warn"
     #- TASK_FLAGS="--dgeni-log=warn"
     # - TASK_FLAGS=""
   matrix:

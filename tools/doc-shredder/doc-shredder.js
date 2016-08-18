@@ -248,10 +248,13 @@ var createShredMapPackage = function(mapOptions) {
         }
       });
 
+      console.log('before hack', includeFiles);
+
       // HACK ( next two lines) because the glob function that dgeni uses internally isn't good at removing 'node_modules' early
       // this just uses globby to 'preglob' the include files ( and  exclude the node_modules).
       var includeFiles = globby.sync( includeFiles, { ignore: ignoreDirs } );
 
+      console.log('after hack', includeFiles);
 
       readFilesProcessor.sourceFiles = [ {
         // Process all candidate files in `src` and its subfolders ...
