@@ -14,6 +14,7 @@ module.exports = function extractPathsReader(log) {
 
     // returns the fragment filePath without the _fragments dir on the front or the '.md'
     getDocs: function (fileInfo) {
+      log.info('file shredding (extractPathsReader): ' + fileInfo.relativePath);
       var content = fileInfo.content;
       var fragItems = [];
       var r;
