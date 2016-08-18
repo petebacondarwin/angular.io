@@ -195,7 +195,9 @@ function getSourceFiles(sourceInfo) {
     // Filter the files on whether they match the `exclude` property and whether they are files
     var filteredFilePromises = files.map(function(file) {
 
-      if ( _.some(excludeMatchers, function(excludeMatcher) { return excludeMatcher.match(file); }) ) {
+      if ( _.some(excludeMatchers, function(excludeMatcher) {
+        console.log('check exclusion:', excludeMatcher, file, excludeMatcher.match(file));
+        return excludeMatcher.match(file); }) ) {
         console.log('excluded', file);
         // Return a promise for `null` if the path is excluded
         // Doing this first - it is synchronous - saves us even making the isFile call if not needed
