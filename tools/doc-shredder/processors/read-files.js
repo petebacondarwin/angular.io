@@ -52,7 +52,7 @@ module.exports = function readFilesProcessor(log) {
 
         sourceInfo = normalizeSourceInfo(basePath, sourceInfo);
 
-        log.debug('Source Info:\n', sourceInfo);
+        console.log('Source Info:\n', sourceInfo);
 
         return getSourceFiles(sourceInfo).then(function(files) {
 
@@ -179,21 +179,24 @@ function getSourceFiles(sourceInfo) {
 
   // Get a list of files to include
   var filesPromises = _.map(sourceInfo.include, function(include) {
+    console.log('include', include);
     // Each call to glob will produce a array of file paths
     return Q.nfcall(glob, include);
   });
 
   return Q.all(filesPromises).then(function(filesCollections) {
-
+    console.log('filesCollections', filesCollections)
     // Once we have all the file path arrays, flatten them into a single array
     return _.flatten(filesCollections);
 
   }).then(function(files) {
+    console.log('files', files);
 
     // Filter the files on whether they match the `exclude` property and whether they are files
     var filteredFilePromises = files.map(function(file) {
 
       if ( _.some(excludeMatchers, function(excludeMatcher) { return excludeMatcher.match(file); }) ) {
+        console.log('excluded', file);
         // Return a promise for `null` if the path is excluded
         // Doing this first - it is synchronous - saves us even making the isFile call if not needed
         return Q(null);
@@ -206,6 +209,7 @@ function getSourceFiles(sourceInfo) {
     // Return a promise to a filtered list of files, those that are files and not excluded
     // (i.e. those that are not `null` from the previous block of code)
     return Q.all(filteredFilePromises).then(function(filteredFiles) {
+      console.log('filteredFiles', filteredFiles);
       return filteredFiles.filter(function(filteredFile) { return filteredFile; });
     });
   });
