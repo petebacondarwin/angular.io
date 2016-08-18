@@ -149,7 +149,7 @@ function createShredExamplePackage(shredOptions) {
       readFilesProcessor.sourceFiles = [ {
         // Process all candidate files in `src` and its subfolders ...
         include: includeFiles ,
-        exclude: [ '**/node_modules/**', '**/dist/**', '**/typings/**', '**/packages/**', '**/build/**'],
+        exclude: [ 'angular.io/node_modules/**', 'angular.io/dist/**', 'angular.io/typings/**', 'angular.io/packages/**', 'angular.io/build/**'],
         // When calculating the relative path to these files use this as the base path.
         // So `src/foo/bar.js` will have relative path of `foo/bar.js`
         basePath: options.examplesDir
@@ -335,7 +335,7 @@ function resolveMapOptions(mapOptions) {
 
 function initializePackage(pkg) {
   return pkg
-    .processor(require('./processors/read-files'))
+    .processor(require('dgeni-packages/base/processors/read-files'))
     .processor(require('dgeni-packages/base/processors/write-files'))
     .factory(require('dgeni-packages/base/services/writeFile'))
 
